@@ -19,11 +19,22 @@ jobs:
           FINAL_URL=$(curl -Ls -o /dev/null -w '%{url_effective}' "https://dnull.xyz/latest_bs")
           echo "url=$FINAL_URL" >> "$GITHUB_OUTPUT"
 
-          # Try to extract a version from the filename (e.g. nb_1.2.3.apk → 1.2.3)
+          # Parse filename like: nb_xx.xxx_release_yyyyyyyy.apk
           FILENAME=$(basename "$FINAL_URL")
-          VERSION=$(echo "$FILENAME" | grep -oP '[\d]+\.[\d]+\.[\d]+' || true)
+          STEM="${FILENAME%.apk}"                                           # nb_xx.xxx_release_yyyyyyyy
+
+          APP=$(echo "$STEM"   | grep -oP '^[a-zA-Z]+' || true)           # nb
+          VERSION=$(echo "$STEM" | grep -oP '[\d]+\.[\d]+' || true)       # xx.xxx
+          COMMIT=$(echo "$STEM"  | grep -oP '[0-9a-f]{7,}$' || true)      # yyyyyyyy
+
+          # Fallbacks if pattern doesn't match
           [ -z "$VERSION" ] && VERSION=$(date -u +%Y%m%d-%H%M)
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          TAG="${APP:+${APP}-}${VERSION}${COMMIT:+-${COMMIT}}"             # nb-xx.xxx-yyyyyyyy
+          TITLE="${APP:+${APP} }${VERSION}${COMMIT:+ (${COMMIT})}"         # nb xx.xxx (yyyyyyyy)
+
+          echo "version=$VERSION"  >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG"          >> "$GITHUB_OUTPUT"
+          echo "title=$TITLE"      >> "$GITHUB_OUTPUT"
           echo "filename=$FILENAME" >> "$GITHUB_OUTPUT"
 
       - name: Check if this version is already released
@@ -31,12 +42,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          EXISTING=$(gh release view "v${{ steps.resolve.outputs.version }}" \
+          EXISTING=$(gh release view "${{ steps.resolve.outputs.tag }}" \
             --repo "$GITHUB_REPOSITORY" \
             --json tagName -q .tagName 2>/dev/null || true)
           if [ -n "$EXISTING" ]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "Version ${{ steps.resolve.outputs.version }} already published, skipping."
+            echo "Version ${{ steps.resolve.outputs.tag }} already published, skipping."
           else
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
@@ -53,8 +64,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "v${{ steps.resolve.outputs.version }}" \
+          gh release create "${{ steps.resolve.outputs.tag }}" \
             --repo "$GITHUB_REPOSITORY" \
-            --title "v${{ steps.resolve.outputs.version }}" \
+            --title "${{ steps.resolve.outputs.title }}" \
             --notes "Auto-mirrored from dnull.xyz/latest_bs" \
             "${{ steps.resolve.outputs.filename }}"
