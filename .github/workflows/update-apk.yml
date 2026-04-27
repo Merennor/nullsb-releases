@@ -1,0 +1,60 @@
+name: Update APK
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # every 6 hours — adjust as needed
+  workflow_dispatch:         # allow manual trigger from Actions tab
+
+permissions:
+  contents: write            # needed to create/update releases
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Resolve final URL
+        id: resolve
+        run: |
+          FINAL_URL=$(curl -Ls -o /dev/null -w '%{url_effective}' "https://dnull.xyz/latest_bs")
+          echo "url=$FINAL_URL" >> "$GITHUB_OUTPUT"
+
+          # Try to extract a version from the filename (e.g. nb_1.2.3.apk → 1.2.3)
+          FILENAME=$(basename "$FINAL_URL")
+          VERSION=$(echo "$FILENAME" | grep -oP '[\d]+\.[\d]+\.[\d]+' || true)
+          [ -z "$VERSION" ] && VERSION=$(date -u +%Y%m%d-%H%M)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "filename=$FILENAME" >> "$GITHUB_OUTPUT"
+
+      - name: Check if this version is already released
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          EXISTING=$(gh release view "v${{ steps.resolve.outputs.version }}" \
+            --repo "$GITHUB_REPOSITORY" \
+            --json tagName -q .tagName 2>/dev/null || true)
+          if [ -n "$EXISTING" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "Version ${{ steps.resolve.outputs.version }} already published, skipping."
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Download APK
+        if: steps.check.outputs.skip == 'false'
+        run: |
+          curl -L --retry 3 --retry-delay 2 \
+               -o "${{ steps.resolve.outputs.filename }}" \
+               "${{ steps.resolve.outputs.url }}"
+
+      - name: Publish GitHub Release
+        if: steps.check.outputs.skip == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "v${{ steps.resolve.outputs.version }}" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "v${{ steps.resolve.outputs.version }}" \
+            --notes "Auto-mirrored from dnull.xyz/latest_bs" \
+            "${{ steps.resolve.outputs.filename }}"
