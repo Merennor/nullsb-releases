@@ -21,14 +21,13 @@ jobs:
           FILENAME=$(basename "$FINAL_URL")
           STEM="${FILENAME%.apk}"                                           # nb_xx.xxx_release_yyyyyyyy
 
-          APP=$(echo "$STEM"   | grep -oP '^[a-zA-Z]+' || true)           # nb
           VERSION=$(echo "$STEM" | grep -oP '[\d]+\.[\d]+' || true)       # xx.xxx
           COMMIT=$(echo "$STEM"  | grep -oP '[0-9a-f]{7,}$' || true)      # yyyyyyyy
 
           # Fallbacks if pattern doesn't match
           [ -z "$VERSION" ] && VERSION=$(date -u +%Y%m%d-%H%M)
-          TAG="${APP:+${APP}-}${VERSION}${COMMIT:+-${COMMIT}}"             # nb-xx.xxx-yyyyyyyy
-          TITLE="${APP:+${APP} }${VERSION}${COMMIT:+ (${COMMIT})}"         # nb xx.xxx (yyyyyyyy)
+          TAG="${VERSION}${COMMIT:+-${COMMIT}}"                             # xx.xxx-yyyyyyyy
+          TITLE="${VERSION}${COMMIT:+ (${COMMIT})}"                        # xx.xxx (yyyyyyyy)
 
           echo "version=$VERSION"  >> "$GITHUB_OUTPUT"
           echo "tag=$TAG"          >> "$GITHUB_OUTPUT"
@@ -67,3 +66,15 @@ jobs:
             --title "${{ steps.resolve.outputs.title }}" \
             --notes "Auto-mirrored from dnull.xyz/latest_bs" \
             "${{ steps.resolve.outputs.filename }}"
+
+      - name: Delete old releases
+        if: steps.check.outputs.skip == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release list --repo "$GITHUB_REPOSITORY" --limit 100 --json tagName -q '.[].tagName' | \
+            grep -v "^${{ steps.resolve.outputs.tag }}$" | \
+            while read -r OLD_TAG; do
+              echo "Deleting release and tag: $OLD_TAG"
+              gh release delete "$OLD_TAG" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag
+            done

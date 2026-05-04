@@ -17,6 +17,6 @@ That's it. Obtainium will notify you when a new release appears.
 | What | Detail |
 |---|---|
 | Source | `dnull.xyz/latest_bs` (redirect to latest APK) |
-| Release tag | `nb-{version}-{commit}` e.g. `nb-xx.yyy-(hash)` |
-| Release title | `nb {version} ({commit})` e.g. `nb xx.yyy (hash)` |
+| Release tag | `{version}-{commit}` e.g. `xx.yyy-(hash)` |
+| Release title | `{version} ({commit})` e.g. `xx.yyy (hash)` |
 | Duplicate guard | Skips publishing if the tag already exists |
