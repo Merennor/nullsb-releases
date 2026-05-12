@@ -1,17 +1,21 @@
 # nb APK mirror
 
-> Auto-mirror for [Obtainium](https://github.com/ImranR98/Obtainium) — **do not use this repo for anything else.**
+> Mirror for [Obtainium](https://github.com/ImranR98/Obtainium) — **do not use this repo for anything else.**
+> If you're looking for official source to download from, [click here](https://nulls.gg/servers/nulls-brawl/download/)
 
-New releases are published by a GitHub Actions workflow that tracks `dnull.xyz/latest_bs`
+[![Downloads](https://img.shields.io/github/downloads/Merennor/nullsb-releases/total?style=for-the-badge)](https://img.shields.io/github/downloads/Merennor/nullsb-releases/total?style=for-the-badge)
 
-## Obtainium setup
+**Releases are published by a GitHub Actions workflow (manual) that downloads from official source of this game (nulls.gg, direct link)**
 
-1. Open Obtainium → **Add App**
-2. Paste this repo URL
-3. Source is auto-detected as **GitHub** — hit Save
-4. Wait up to 5-10mins (or you will get error and retry again from scratch)
+Nulls doesn't have an in-app updater as such, and when a new version is released, it simply asks you to go to their website to download the new update. (And keep in mind that it won't let you play until you install the update)
+With Obtainium, we can set up auto-updates without having to open a browser (and also Obtainium will clean up the update apk file eventually)
 
-That's it. Obtainium will notify you when a new release appears.
+## Setup
+
+1. [Add it to Obtainium](https://apps.obtainium.imranr.dev/redirect.html?r=obtainium://add/https://github.com/Merennor/nullsb-releases) (or do it manually by copy pasting this repo's link)
+2. hit Save button, then wait up to 5-10mins (**DON'T LEFT THE APP**, or you will get error)
+
+And that's all you need to do. Now Obtainium will notify you when a new release appears.
 
 ## How it works
 
@@ -20,4 +24,4 @@ That's it. Obtainium will notify you when a new release appears.
 | Source | `dnull.xyz/latest_bs` (redirect to latest APK) |
 | Release tag | `{version}-{commit}` e.g. `xx.yyy-(hash)` |
 | Release title | `{version} ({commit})` e.g. `xx.yyy (hash)` |
-| Duplicate guard | Skips publishing if the tag already exists |
+| Old versions | Will be removed after new update/release |
