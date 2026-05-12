@@ -8,6 +8,7 @@
 **Releases are published by a GitHub Actions workflow (manual) that downloads from official source of this game (nulls.gg, direct link)**
 
 Nulls doesn't have an in-app updater as such, and when a new version is released, it simply asks you to go to their website to download the new update. (And keep in mind that it won't let you play until you install the update)
+
 With Obtainium, we can set up auto-updates without having to open a browser (and also Obtainium will clean up the update apk file eventually)
 
 ## Setup
