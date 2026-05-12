@@ -9,6 +9,7 @@ New releases are published by a GitHub Actions workflow that tracks `dnull.xyz/l
 1. Open Obtainium → **Add App**
 2. Paste this repo URL
 3. Source is auto-detected as **GitHub** — hit Save
+4. Wait up to 5-10mins (or you will get error and retry again from scratch)
 
 That's it. Obtainium will notify you when a new release appears.
 
