@@ -1,28 +1,26 @@
-# nb APK mirror
+# Nulls Brawl APK mirror
 
 > Mirror for [Obtainium](https://github.com/ImranR98/Obtainium) — **do not use this repo for anything else.**
-> If you're looking for official source to download from, [click here](https://nulls.gg/servers/nulls-brawl/download/)
+> Looking for the official source? [Download from nulls.gg](https://nulls.gg/servers/nulls-brawl/download/)
 
-[![Downloads](https://img.shields.io/github/downloads/Merennor/nullsb-releases/total?style=for-the-badge)](https://img.shields.io/github/downloads/Merennor/nullsb-releases/total?style=for-the-badge)
+[![Downloads](https://img.shields.io/github/downloads/Merennor/nullsb-releases/total?style=for-the-badge)](https://github.com/Merennor/nullsb-releases/releases)
 
-**Releases are published by a GitHub Actions workflow (manual) that downloads from official source of this game (nulls.gg, direct link)**
+Releases are published by a GitHub Actions workflow that downloads the latest APK from the official source (nulls.gg).
 
-Nulls doesn't have an in-app updater as such, and when a new version is released, it simply asks you to go to their website to download the new update. (And keep in mind that it won't let you play until you install the update)
-
-With Obtainium, we can set up auto-updates without having to open a browser (and also Obtainium will clean up the update apk file eventually)
+Nulls Brawl doesn't have an in-app updater. When a new version is released, the game prompts you to visit their website — and won't let you play until you update. With Obtainium, you can automate this: it checks for updates in the background and handles APK cleanup automatically.
 
 ## Setup
 
-1. [Add it to Obtainium](https://apps.obtainium.imranr.dev/redirect.html?r=obtainium://add/https://github.com/Merennor/nullsb-releases) (or do it manually by copy pasting this repo's link)
-2. hit Save button, then wait up to 5-10mins (**DON'T LEFT THE APP**, or you will get error)
+1. [Add the repo to Obtainium](https://apps.obtainium.imranr.dev/redirect.html?r=obtainium://add/https://github.com/Merennor/nullsb-releases) — or manually paste `https://github.com/Merennor/nullsb-releases` as the app URL in Obtainium
+2. Tap **Save**, then wait up to 5–10 minutes (**don't leave the app** or you may get an error)
 
-And that's all you need to do. Now Obtainium will notify you when a new release appears.
+That's it. Obtainium will notify you whenever a new release is available.
 
 ## How it works
 
 | What | Detail |
 |---|---|
-| Source | `dnull.xyz/latest_bs` (redirect to latest APK) |
+| Source | `https://dnull.xyz/latest_bs` (redirects to latest APK) |
 | Release tag | `{version}-{commit}` e.g. `xx.yyy-(hash)` |
 | Release title | `{version} ({commit})` e.g. `xx.yyy (hash)` |
-| Old versions | Will be removed after new update/release |
+| Old versions | Removed after each new release |
