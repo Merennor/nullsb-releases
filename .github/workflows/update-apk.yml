@@ -1,7 +1,7 @@
 name: Update APK
 
 on:
-  workflow_dispatch:         # manual trigger from Actions tab
+  workflow_dispatch:         # allow manual trigger from Actions tab
 
 permissions:
   contents: write            # needed to create/update releases
@@ -19,15 +19,15 @@ jobs:
 
           # Parse filename like: nb_xx.xxx_release_yyyyyyyy.apk
           FILENAME=$(basename "$FINAL_URL")
-          STEM="${FILENAME%.apk}"                                         # nb_xx.xxx_release_yyyyyyyy
+          STEM="${FILENAME%.apk}"                                           # nb_xx.xxx_release_yyyyyyyy
 
           VERSION=$(echo "$STEM" | grep -oP '[\d]+\.[\d]+' || true)       # xx.xxx
           COMMIT=$(echo "$STEM"  | grep -oP '[0-9a-f]{7,}$' || true)      # yyyyyyyy
 
           # Fallbacks if pattern doesn't match
           [ -z "$VERSION" ] && VERSION=$(date -u +%Y%m%d-%H%M)
-          TAG="${VERSION}"                                                # xx.xxx
-          TITLE="${VERSION}${COMMIT:+ (${COMMIT})}"                       # xx.xxx (yyyyyyyy)
+          TAG="${VERSION}"                                                   # xx.xxx
+          TITLE="${VERSION}${COMMIT:+ (${COMMIT})}"                        # xx.xxx (yyyyyyyy)
 
           echo "version=$VERSION"  >> "$GITHUB_OUTPUT"
           echo "tag=$TAG"          >> "$GITHUB_OUTPUT"
@@ -56,8 +56,8 @@ jobs:
           PAGE=$(curl -Ls "https://nulls.gg/servers/nulls-brawl/")
 
           CHANGELOG=$(echo "$PAGE" | tr '\n' ' ' | \
-            grep -oP '(?<=<h3>Null.s Brawl</h3>)\s*<p>\K[^<]+' | \
-            sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | head -1)
+            grep -oP '<p[^>]*>\s*\KNew version:[^<]+' | \
+            sed 's/[[:space:]]*$//' | head -1)
 
           SITE_VERSION=$(echo "$PAGE" | grep -oP 'Latest version:\s*v\K[\d.]+' | head -1)
 
