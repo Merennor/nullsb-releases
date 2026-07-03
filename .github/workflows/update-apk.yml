@@ -26,7 +26,7 @@ jobs:
 
           # Fallbacks if pattern doesn't match
           [ -z "$VERSION" ] && VERSION=$(date -u +%Y%m%d-%H%M)
-          TAG="${VERSION}${COMMIT:+-${COMMIT}}"                             # xx.xxx-yyyyyyyy
+          TAG="${VERSION}"                                                   # xx.xxx
           TITLE="${VERSION}${COMMIT:+ (${COMMIT})}"                        # xx.xxx (yyyyyyyy)
 
           echo "version=$VERSION"  >> "$GITHUB_OUTPUT"
