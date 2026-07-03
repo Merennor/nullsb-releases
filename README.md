@@ -21,6 +21,7 @@ That's it. Obtainium will notify you whenever a new release is available.
 | What | Detail |
 |---|---|
 | Source | `https://dnull.xyz/latest_bs` (redirects to latest APK) |
-| Release tag | `{version}-{commit}` e.g. `xx.yyy-(hash)` |
+| Release tag | `{version}` e.g. `xx.yyy` |
 | Release title | `{version} ({commit})` e.g. `xx.yyy (hash)` |
+| Release notes | Changelog text from nulls.gg (if available), plus source attribution |
 | Old versions | Removed after each new release |
