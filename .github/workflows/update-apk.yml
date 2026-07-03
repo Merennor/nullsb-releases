@@ -56,8 +56,13 @@ jobs:
           PAGE=$(curl -Ls "https://nulls.gg/servers/nulls-brawl/")
 
           CHANGELOG=$(echo "$PAGE" | tr '\n' ' ' | \
-            grep -oP '<p[^>]*>\s*\KNew version:[^<]+' | \
+            grep -oP 'New version:[^<]+' | \
             sed 's/[[:space:]]*$//' | head -1)
+
+          if [ -z "$CHANGELOG" ]; then
+            echo "::warning::Changelog not found in raw HTML. Page may be JS-rendered. First 500 chars of response:"
+            echo "$PAGE" | head -c 500
+          fi
 
           SITE_VERSION=$(echo "$PAGE" | grep -oP 'Latest version:\s*v\K[\d.]+' | head -1)
 
