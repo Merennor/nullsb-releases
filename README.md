@@ -11,7 +11,7 @@ Nulls Brawl doesn't have an in-app updater. When a new version is released, the 
 
 ## Setup
 
-1. [Add the repo to Obtainium](https://apps.obtainium.imranr.dev/redirect.html?r=obtainium://add/https://github.com/Merennor/nullsb-releases) — or manually paste `https://github.com/Merennor/nullsb-releases` as the app URL in Obtainium
+1. Paste `https://github.com/Merennor/nullsb-releases` as the app URL in Obtainium
 2. Tap **Save**, then wait up to 5–10 minutes (**don't leave the app** or you may get an error)
 
 That's it. Obtainium will notify you whenever a new release is available.
